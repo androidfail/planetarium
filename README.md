@@ -46,19 +46,13 @@ Needs Node.js 18+ and Obsidian 1.4+. Nothing else to download: the Obsidian plug
 ## How agents work together
 
 - **Scopes.** Every task lists the files it will touch. A task whose scope overlaps work in progress (or a build waiting for its test) is skipped; an agent only asks the owner for approval when nothing else is free.
-- **Build, then test.** An agent that finishes building posts a test request in **Comms** and moves on to new work. Another agent runs the test: pass lands it in **Landed**, fail puts it back at the top of the **Star Chart** with what broke.
+- **Build, then test.** An agent that finishes building posts a test request under **Requests** and moves on to new work. Another agent runs the test: a pass moves it to **Completed**, a fail puts it back at the top of **Tasks** with what broke.
 - **Sub-agents.** With `subagents=N`, the parent claims work for its sub-agents and does every board edit itself; sub-agents never touch the board.
 - **Lock.** All board edits go through one atomic folder lock (`Agents/.lock`), so agents can't overwrite each other.
 
 The board is plain Markdown. You can edit it by hand at any time; the agents follow the line formats in `commands/hook.md`.
 
-| Board section | On screen |
-|---|---|
-| Hooked Agents | **Orbit**: planets, moons for sub-agents |
-| `## Queue` | **In Flight** |
-| `## Requests` | **Comms**: approvals and test requests |
-| `## Tasks` | **Star Chart** |
-| `## Completed` | **Landed** |
+On the live board every agent is a planet orbiting your project and its sub-agents are moons; the other sections match the headings in `Board.md`: **Queue**, **Requests**, **Tasks**, **Completed**.
 
 ## Phone view
 

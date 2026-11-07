@@ -1,7 +1,7 @@
 {
   "id": "planetarium",
   "name": "Planetarium",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "minAppVersion": "1.4.0",
   "description": "Live solar-system board for Claude Code and Oh My Pi agents working from Agents/Board.md.",
   "author": "Fancyvirus",

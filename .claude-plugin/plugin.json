@@ -1,6 +1,6 @@
 {
   "name": "planetarium",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Multi-agent work board in an Obsidian vault: agents hook in, claim tasks, hand off tests, run sub-agents, and orbit a live solar-system dashboard.",
   "author": { "name": "Fancyvirus" },
   "license": "MIT",

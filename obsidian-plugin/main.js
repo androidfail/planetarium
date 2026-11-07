@@ -116,7 +116,7 @@ function render(board, agents, now) {
 
   // Solar system: one orbit per live agent, moons for its running sub-agents. Lit side always faces the star.
   const span = 64 / Math.max(live.length, 1);
-  const system = `<div class="pl-system" role="img" aria-label="${live.length} agents in orbit">
+  const system = `<div class="pl-system" role="img" aria-label="${live.length} active agents">
     <div class="pl-star"></div>
     ${live.map((a, i) => {
       const t = 28 + i * 13;
@@ -133,22 +133,22 @@ function render(board, agents, now) {
       `<span class="pl-sub pl-${stateOf(s)}" title="Agent ${esc(s.n)}: ${stateOf(s)}">${mini(s.n)}<i>${esc(s.n)}</i></span>`).join("")}</div>` : "";
     return `<div class="pl-agent pl-${stateOf(a)}">${mini(a.n)}<div class="pl-main"><b>Agent ${esc(a.n)}</b>
       <small>${stateOf(a)}${subs.length ? ` · ${subs.length} moon${subs.length > 1 ? "s" : ""}` : ""}</small>${subHtml}</div></div>`;
-  }).join("") : empty("No agents in orbit yet. Run /hook in Claude Code or Oh My Pi.");
+  }).join("") : empty("No agents hooked yet. Run /hook in Claude Code or Oh My Pi.");
 
   const queueHtml = board.queue.length ? board.queue.map((q) => {
     const stale = (now - toDate(q.since)) / 3600000 > 1;
     return `<div class="pl-row ${q.waiting ? "pl-wait" : ""} ${stale ? "pl-stale" : ""}">
       ${mini(q.agent)}<div class="pl-main"><b>${esc(q.id)}</b> ${esc(q.title)}
       <div class="pl-chips">${q.scope.map(chip).join("")}</div></div>
-      <div class="pl-side">${q.waiting ? `<span class="pl-tag">holding for ${esc(q.waiting)}</span>` : ""}${clock(q.since, now)}</div></div>`;
-  }).join("") : empty("Nothing in flight.");
+      <div class="pl-side">${q.waiting ? `<span class="pl-tag">waiting on ${esc(q.waiting)}</span>` : ""}${clock(q.since, now)}</div></div>`;
+  }).join("") : empty("Queue is empty.");
 
   const taskHtml = board.tasks.length ? board.tasks.map((t) => {
     const failed = /^test failed/i.test(t.notes || "");
     return `<div class="pl-row ${failed ? "pl-failed" : ""}"><span class="pl-starpt"></span><div class="pl-main"><b>${esc(t.id)}</b> ${esc(t.title)}
      ${t.notes ? `<small>${esc(t.notes)}</small>` : ""}
      <div class="pl-chips">${t.scope.length ? t.scope.map(chip).join("") : `<span class="pl-chip pl-noscope">no scope</span>`}</div></div></div>`;
-  }).join("") : empty("Star chart is clear.");
+  }).join("") : empty("No tasks left.");
 
   const testHtml = (r) => {
     const run = !!r.tester;
@@ -165,14 +165,14 @@ function render(board, agents, now) {
     return `<div class="pl-row pl-req ${cls}">${mini(r.from)}<span class="pl-arrow">⟶</span>${mini(r.to)}
       <div class="pl-main"><b>${esc(r.id)}</b> Agent ${esc(r.from)} → Agent ${esc(r.to)}<small>${esc(r.detail || "")}</small></div>
       <span class="pl-tag">${esc(st)}</span></div>`;
-  }).join("") : empty("Comms are quiet.");
+  }).join("") : empty("No open requests.");
 
   const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
   const doneToday = board.completed.filter((c) => (c.done || "").startsWith(today)).length;
   const doneHtml = board.completed.length ? board.completed.slice(0, 10).map((c) =>
     `<div class="pl-row pl-done">${mini(c.agent, "pl-dim")}<div class="pl-main"><b>${esc(c.id)}</b> ${esc(c.title)}
      ${c.notes ? `<small>${esc(c.notes)}</small>` : ""}</div><span class="pl-time">${esc((c.done || "").slice(11) || c.done || "")}</span></div>`
-  ).join("") : empty("Nothing has landed yet.");
+  ).join("") : empty("Nothing completed yet.");
 
   const openReq = board.requests.filter((r) => r.test || !/^(approved|denied)/i.test(r.status || "")).length;
   const tests = board.requests.filter((r) => r.test).length;
@@ -180,13 +180,13 @@ function render(board, agents, now) {
 
   return `<div class="pl-board">
     <div class="pl-head">${icon("logo", "pl-logo")}<h2>Planetarium</h2>
-      <div class="pl-stats"><span><b>${activeCount}</b> in orbit</span><span><b>${board.queue.length}</b> in flight</span><span><b>${tests}</b> awaiting tests</span><span><b>${doneToday}</b> landed today</span></div></div>
+      <div class="pl-stats"><span><b>${activeCount}</b> agents</span><span><b>${board.queue.length}</b> in queue</span><span><b>${tests}</b> awaiting tests</span><span><b>${doneToday}</b> completed today</span></div></div>
     <div class="pl-grid">
-    ${card("agents", "orbit", "Orbit", "agents", activeCount, `<div class="pl-orbit-wrap">${system}<div class="pl-legend">${legend}</div></div>`)}
-    ${card("queue", "rocket", "In Flight", "being built", board.queue.length, queueHtml)}
-    ${card("requests", "comms", "Comms", "approvals &amp; tests", openReq, reqHtml)}
-    ${card("tasks", "chart", "Star Chart", "planned tasks", board.tasks.length, taskHtml)}
-    ${card("completed", "flag", "Landed", "completed", `${doneToday} today`, doneHtml)}
+    ${card("agents", "orbit", "Agents", "planets are agents, moons are sub-agents", activeCount, `<div class="pl-orbit-wrap">${system}<div class="pl-legend">${legend}</div></div>`)}
+    ${card("queue", "rocket", "Queue", "being worked on", board.queue.length, queueHtml)}
+    ${card("requests", "comms", "Requests", "approvals and tests", openReq, reqHtml)}
+    ${card("tasks", "chart", "Tasks", "not started", board.tasks.length, taskHtml)}
+    ${card("completed", "flag", "Completed", "done", `${doneToday} today`, doneHtml)}
     </div>
   </div>`;
 }
