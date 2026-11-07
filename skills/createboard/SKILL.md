@@ -1,13 +1,16 @@
 ---
+name: createboard
 description: Set up a Planetarium board in an Obsidian vault folder (creates the folder, installs the board plugin and theme)
 argument-hint: <vault folder path>
+disable-model-invocation: true
 ---
 
-Set up a Planetarium board at: $ARGUMENTS
+**CLI (`PL` below):** `${CLAUDE_PLUGIN_ROOT}/planetarium.mjs` if that variable was filled in; otherwise `planetarium.mjs` in this plugin's root folder, two levels above this SKILL.md. Run it with `node`.
+
+Set up a Planetarium board at: $ARGUMENTS (if this shows literally as `$ARGUMENTS`, take the vault path and options from the user's message)
 
 1. If no path was given, stop and ask for one.
-2. Run (shell): `node "${CLAUDE_PLUGIN_ROOT}/planetarium.mjs" create "<path>"`
-   If `${CLAUDE_PLUGIN_ROOT}` did not expand, find `planetarium.mjs` (Glob `**/planetarium/**/planetarium.mjs` under `~/.claude/plugins` or `~/.omp/plugins`) and run that.
+2. Run (shell): `node "<PL>" create "<path>"`
    It copies the board files without overwriting your notes, installs/updates the bundled Planetarium Obsidian plugin (draws the live board) and enables the `planetarium-theme` snippet and dark mode. Running it again on an existing board just updates the plugin and theme.
 3. If it printed a `!` line, tell the user that line and what to do about it.
 4. Tell the user, in short:

@@ -2,11 +2,17 @@
 
 A shared work board for teams of coding agents, kept in an Obsidian vault and shown as a live solar system.
 
-Agents (Claude Code or Oh My Pi) hook into the board, claim tasks, ask each other before touching the same files, hand finished builds to another agent for testing, and can run sub-agents of their own. Every agent is a planet orbiting your project; its sub-agents are moons.
+Agents (Codex, Claude Code or Oh My Pi, mixed freely) hook into the board, claim tasks, ask each other before touching the same files, hand finished builds to another agent for testing, and can run sub-agents of their own. Every agent is a planet orbiting your project; its sub-agents are moons.
 
 ## Install
 
-One package does everything: Claude Code plugin, Oh My Pi plugin, and the Obsidian plugin it installs into your vault.
+One package does everything: Codex plugin, Claude Code plugin, Oh My Pi plugin, and the Obsidian plugin it installs into your vault.
+
+**Codex** (ChatGPT)
+```bash
+codex plugin marketplace add androidfail/planetarium
+codex plugin add planetarium@planetarium
+```
 
 **Claude Code**
 ```bash
@@ -35,6 +41,8 @@ Needs Node.js 18+ and Obsidian 1.4+. Nothing else to download: the Obsidian plug
 4. In each agent session: `/hook ~/Documents/MyBoard` (or `/hook ~/Documents/MyBoard subagents=3`).
 
 ## Commands
+
+In Claude Code and Oh My Pi these are slash commands. In Codex they are skills: pick `planetarium:hook` (etc.) from `/skills`, or just ask, e.g. "use planetarium:hook on ~/Documents/MyBoard".
 
 | Command | What it does |
 |---|---|
@@ -65,6 +73,7 @@ On the live board every agent is a planet orbiting your project and its sub-agen
 
 ## Troubleshooting
 
+- **Codex can't write to the board** → Codex's sandbox only writes inside the folder it was started in. Start Codex with `--add-dir <vault>` (or approve the write when asked). `/serveboard` starts a background server, so approve it to run outside the sandbox.
 - **Board Home shows a code block** → the Planetarium plugin isn't enabled: Obsidian Settings → Community plugins → turn off Restricted mode, enable Planetarium.
 - **Changes don't show** → the board re-reads every 3 seconds; check the agent is editing `Agents/Board.md` in the same vault.
 - **An agent vanished mid-task** → after an hour, any agent can return its work to the board.
@@ -76,7 +85,7 @@ node test/planetarium.test.mjs           # parser + render checks
 node test/planetarium.test.mjs out.html  # also writes a static preview
 ```
 
-Layout: `commands/` (agent instructions), `planetarium.mjs` (CLI: create, lock, serve), `obsidian-plugin/` (board renderer, also used by the phone view), `vault/` (files copied into new boards).
+Layout: `skills/` (agent instructions, shared by all three tools), `.claude-plugin/` + `.codex-plugin/` + `.agents/plugins/` (manifests), `planetarium.mjs` (CLI: create, lock, serve), `obsidian-plugin/` (board renderer, also used by the phone view), `vault/` (files copied into new boards).
 
 ## License
 

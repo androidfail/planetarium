@@ -1,0 +1,24 @@
+{
+  "name": "planetarium",
+  "version": "1.1.0",
+  "description": "Multi-agent work board in an Obsidian vault: agents hook in, claim tasks, hand off tests, run sub-agents, and show up on a live solar-system dashboard.",
+  "author": { "name": "Fancyvirus" },
+  "homepage": "https://github.com/androidfail/planetarium",
+  "repository": "https://github.com/androidfail/planetarium",
+  "license": "MIT",
+  "keywords": ["obsidian", "multi-agent", "task-board", "sub-agents"],
+  "interface": {
+    "displayName": "Planetarium",
+    "shortDescription": "Shared Obsidian task board for teams of coding agents",
+    "longDescription": "Agents from Codex, Claude Code and Oh My Pi hook into one Obsidian board, claim tasks by file scope, ask before touching the same files, hand finished builds to another agent for testing, and can run sub-agents. The board renders live in Obsidian and on a phone on the same Wi-Fi.",
+    "developerName": "Fancyvirus",
+    "category": "Developer Tools",
+    "capabilities": ["Interactive", "Read", "Write"],
+    "defaultPrompt": [
+      "Use createboard to set up a Planetarium board in ~/Documents/MyBoard.",
+      "Use hook to join the Planetarium board at ~/Documents/MyBoard and work through its tasks."
+    ],
+    "brandColor": "#E9A640"
+  },
+  "skills": "./skills/"
+}

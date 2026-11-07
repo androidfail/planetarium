@@ -133,7 +133,7 @@ function render(board, agents, now) {
       `<span class="pl-sub pl-${stateOf(s)}" title="Agent ${esc(s.n)}: ${stateOf(s)}">${mini(s.n)}<i>${esc(s.n)}</i></span>`).join("")}</div>` : "";
     return `<div class="pl-agent pl-${stateOf(a)}">${mini(a.n)}<div class="pl-main"><b>Agent ${esc(a.n)}</b>
       <small>${stateOf(a)}${subs.length ? ` · ${subs.length} moon${subs.length > 1 ? "s" : ""}` : ""}</small>${subHtml}</div></div>`;
-  }).join("") : empty("No agents hooked yet. Run /hook in Claude Code or Oh My Pi.");
+  }).join("") : empty("No agents hooked yet. Run the hook skill from your agent (/hook in Claude Code).");
 
   const queueHtml = board.queue.length ? board.queue.map((q) => {
     const stale = (now - toDate(q.since)) / 3600000 > 1;

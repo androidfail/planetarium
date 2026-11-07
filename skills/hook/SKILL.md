@@ -1,9 +1,13 @@
 ---
+name: hook
 description: Hook this agent into a Planetarium board (Obsidian vault) and work through its tasks
 argument-hint: <vault folder path> [subagents=N]
+disable-model-invocation: true
 ---
 
-Arguments: $ARGUMENTS
+**CLI (`PL` below):** `${CLAUDE_PLUGIN_ROOT}/planetarium.mjs` if that variable was filled in; otherwise `planetarium.mjs` in this plugin's root folder, two levels above this SKILL.md. Run it with `node`.
+
+Arguments: $ARGUMENTS (if this shows literally as `$ARGUMENTS`, take the vault path and options from the user's message)
 The first argument is the vault path; call it `V`. An optional `subagents=N` (default 0) lets you run up to N sub-agents at once (see **Sub-agents**). The board is `V/Agents/Board.md`; the agent log is `V/Agents/Hooked Agents.md`. If they don't exist, stop and tell the user to run `/createboard <path>` first.
 
 Other agents edit these files at the same time. Follow these rules exactly.
@@ -13,17 +17,16 @@ Other agents edit these files at the same time. Follow these rules exactly.
 Take the lock (shell). It waits for other agents and clears a lock older than 2 minutes:
 
 ```bash
-node "${CLAUDE_PLUGIN_ROOT}/planetarium.mjs" lock take "<vault path>"
+node "<PL>" lock take "<vault path>"
 ```
 
 It prints `LOCKED <time>` (use that time for any timestamp you write). `NOT LOCKED` → run it again. Holding the lock: **Read the file fresh** (never edit from an older read), make your edit, then release right away:
 
 ```bash
-node "${CLAUDE_PLUGIN_ROOT}/planetarium.mjs" lock release "<vault path>"
+node "<PL>" lock release "<vault path>"
 ```
 
-Never hold the lock while doing task work. Current time without locking: `node "${CLAUDE_PLUGIN_ROOT}/planetarium.mjs" lock now`.
-If `${CLAUDE_PLUGIN_ROOT}` did not expand, find the planetarium plugin's `planetarium.mjs` (Glob `**/planetarium/**/planetarium.mjs` under `~/.claude/plugins` or `~/.omp/plugins`) and use that path.
+Never hold the lock while doing task work. Current time without locking: `node "<PL>" lock now`.
 
 ## Join
 
@@ -85,7 +88,7 @@ While working, keep your log line `status: active`.
 
 ## Sub-agents (only with `subagents=N`, N ≥ 1)
 
-You are the **parent**. Use your harness's sub-agent tool (Claude Code: Agent tool; Oh My Pi: task tool) to run up to N jobs in parallel while you keep the board moving.
+You are the **parent**. Use your harness's sub-agent tool (Claude Code: Agent tool; Oh My Pi: task tool; Codex: its sub-agent tool, when enabled) to run up to N jobs in parallel while you keep the board moving.
 
 - **Ids:** `Agent N.1`, `Agent N.2`, … in the order you start them; never reuse one in this session.
 - **Only you touch the board.** Sub-agents never read or edit `Board.md` / `Hooked Agents.md` and never take the lock. You do every claim, hand-off and result for them, under the lock as usual.
