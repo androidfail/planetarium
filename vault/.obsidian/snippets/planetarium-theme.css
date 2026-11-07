@@ -1,0 +1,84 @@
+/* Planetarium vault theme: deep navy space, sun-gold accent, teal links. Matches the board.
+   Enabled by `planetarium.mjs create` through .obsidian/appearance.json (enabledCssSnippets). Dark mode only. */
+body.theme-dark {
+  --pl-void: #050814;
+  --pl-deep: #0a1024;
+  --pl-line: rgba(160, 180, 255, 0.12);
+
+  --background-primary: var(--pl-deep);
+  --background-primary-alt: #0d1530;
+  --background-secondary: #070c1c;
+  --background-secondary-alt: #050916;
+  --background-modifier-border: var(--pl-line);
+  --background-modifier-hover: rgba(140, 170, 255, 0.08);
+  --background-modifier-active-hover: rgba(140, 170, 255, 0.14);
+  --background-modifier-form-field: rgba(255, 255, 255, 0.04);
+  --text-normal: #e8ecff;
+  --text-muted: #8f9bc4;
+  --text-faint: #5d6890;
+  --text-accent: #ffc864;
+  --text-accent-hover: #ffdb98;
+  --interactive-accent: #e9a640;
+  --interactive-accent-hover: #ffbf5c;
+  --color-accent: #e9a640;
+  --link-color: #6fd3e6;
+  --link-color-hover: #a8ecf7;
+  --link-unresolved-color: #ff9aa8;
+  --tag-color: #e8ecff;
+  --tag-background: rgba(111, 211, 230, 0.10);
+  --tag-border-color: rgba(111, 211, 230, 0.35);
+  --tag-border-width: 1px;
+  --tag-radius: 6px;
+  --code-background: rgba(255, 255, 255, 0.035);
+  --h1-color: #fff3d6;
+  --h2-color: #ffc864;
+  --h3-color: #6fd3e6;
+  --h4-color: #b7a6f0;
+  --h5-color: #62d69a;
+  --h6-color: #f6a46a;
+  --titlebar-background: var(--pl-void);
+  --titlebar-background-focused: var(--pl-void);
+  --tab-container-background: var(--pl-void);
+  --ribbon-background: var(--pl-void);
+  --checkbox-color: #62d69a;
+  --blockquote-border-color: #e9a640;
+}
+
+/* faint star field and nebula behind notes */
+.theme-dark .workspace-split.mod-root .view-content {
+  background:
+    radial-gradient(1px 1px at 9% 14%, #ffffff66, transparent 60%),
+    radial-gradient(1px 1px at 76% 11%, #cfe3ff55, transparent 60%),
+    radial-gradient(1.3px 1.3px at 88% 61%, #ffe9c455, transparent 60%),
+    radial-gradient(1px 1px at 34% 86%, #ffffff44, transparent 60%),
+    radial-gradient(1px 1px at 57% 38%, #ffffff33, transparent 60%),
+    radial-gradient(800px 420px at 0% 0%, rgba(40, 120, 170, 0.14), transparent 60%),
+    radial-gradient(700px 420px at 100% 100%, rgba(150, 60, 160, 0.10), transparent 60%),
+    var(--pl-deep);
+}
+.theme-dark .workspace-split.mod-root .workspace-leaf-content,
+.theme-dark .markdown-reading-view, .theme-dark .markdown-source-view,
+.theme-dark .cm-scroller, .theme-dark .markdown-preview-view { background: transparent; }
+
+/* headings: warm sunlight on the first two levels */
+.theme-dark .inline-title, .theme-dark .markdown-rendered h1, .theme-dark .HyperMD-header-1 { text-shadow: 0 0 20px rgba(255, 190, 90, 0.35); letter-spacing: 0.01em; }
+.theme-dark .markdown-rendered h2, .theme-dark .HyperMD-header-2 { text-shadow: 0 0 14px rgba(255, 190, 90, 0.25); }
+
+/* active tab: thin sun-gold horizon line */
+.theme-dark .workspace-tab-header.is-active { box-shadow: inset 0 2px 0 #e9a640; }
+
+/* file explorer: active note marked like a planet on its orbit */
+.theme-dark .tree-item-self.is-active {
+  background: linear-gradient(90deg, rgba(233, 166, 64, 0.16), transparent);
+  box-shadow: inset 2px 0 0 #e9a640;
+  color: var(--text-normal);
+}
+.theme-dark .nav-folder-title { font-weight: 600; }
+
+/* panels as dark instruments */
+.theme-dark .markdown-rendered pre, .theme-dark .HyperMD-codeblock,
+.theme-dark .callout, .theme-dark .markdown-rendered table { border: 1px solid var(--pl-line); border-radius: 12px; }
+.theme-dark .callout { background: rgba(9, 14, 32, 0.8); box-shadow: inset 0 1px 0 rgba(255, 200, 100, 0.2); }
+.theme-dark .markdown-rendered th { background: rgba(111, 211, 230, 0.08); }
+.theme-dark .metadata-container { background: rgba(9, 14, 32, 0.7); border: 1px solid var(--pl-line); border-radius: 12px; padding: 8px 12px; }
+.theme-dark input[type="checkbox"]:checked { box-shadow: 0 0 8px rgba(98, 214, 154, 0.55); }

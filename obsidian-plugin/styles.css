@@ -1,0 +1,235 @@
+/* Planetarium board. Loaded by Obsidian as the plugin stylesheet, and served to the phone view. */
+.pl-page .markdown-preview-sizer, .pl-page .cm-sizer { max-width: 1440px !important; }
+
+.pl-board {
+  --pl-text: #e8ecff;
+  --pl-muted: #8f9bc4;
+  --pl-panel: rgba(9, 14, 32, 0.86);
+  --pl-line: rgba(160, 180, 255, 0.10);
+  position: relative;
+  padding: 20px;
+  border-radius: 24px;
+  color: var(--pl-text);
+  font-family: var(--font-interface, "Inter", system-ui, sans-serif);
+  overflow: hidden;
+  isolation: isolate;
+  background:
+    radial-gradient(900px 420px at 8% -10%, rgba(40, 120, 170, 0.28), transparent 60%),
+    radial-gradient(700px 480px at 110% 20%, rgba(150, 60, 160, 0.22), transparent 60%),
+    radial-gradient(600px 400px at 50% 120%, rgba(30, 70, 160, 0.25), transparent 60%),
+    #050814;
+}
+/* two star layers, one twinkling */
+.pl-board::before, .pl-board::after {
+  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background-image:
+    radial-gradient(1px 1px at 7% 12%, #fff, transparent 60%), radial-gradient(1px 1px at 23% 64%, #cfe3ff, transparent 60%),
+    radial-gradient(1px 1px at 41% 28%, #fff, transparent 60%), radial-gradient(1.4px 1.4px at 58% 81%, #ffe9c4, transparent 60%),
+    radial-gradient(1px 1px at 74% 37%, #fff, transparent 60%), radial-gradient(1px 1px at 89% 72%, #cfe3ff, transparent 60%),
+    radial-gradient(1px 1px at 95% 9%, #fff, transparent 60%), radial-gradient(1px 1px at 13% 91%, #fff, transparent 60%);
+  background-size: 420px 300px;
+  opacity: 0.55;
+}
+.pl-board::after { background-size: 290px 230px; background-position: 60px 40px; animation: pl-twinkle 5s ease-in-out infinite; }
+
+/* header */
+.pl-head { display: flex; align-items: center; flex-wrap: wrap; gap: 10px 14px; margin: 2px 4px 18px; }
+.pl-head h2 { margin: 0; font-size: 1.45em; font-weight: 700; letter-spacing: 0.06em; color: var(--pl-text); }
+.pl-logo { width: 30px; height: 30px; color: #ffc864; filter: drop-shadow(0 0 8px rgba(255, 190, 90, 0.6)); }
+.pl-stats { display: flex; flex-wrap: wrap; gap: 6px; margin-left: auto; }
+.pl-stats span { padding: 3px 10px; border-radius: 99px; font-size: 0.78em; color: var(--pl-muted); background: rgba(255, 255, 255, 0.04); border: 1px solid var(--pl-line); }
+.pl-stats b { color: var(--pl-text); font-family: var(--font-monospace, monospace); margin-right: 3px; }
+
+.pl-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(310px, 100%), 1fr)); gap: 16px; }
+
+/* cards: dark panel, a planet rising over the top-right corner, accent hairline along the top */
+.pl-card {
+  --c: 40 95% 62%;
+  position: relative; overflow: hidden; min-height: 230px;
+  padding: 16px 16px 14px; border-radius: 18px;
+  background: linear-gradient(180deg, hsl(var(--c) / 0.07), transparent 120px), var(--pl-panel);
+  border: 1px solid var(--pl-line);
+  box-shadow: 0 18px 40px -20px #000, inset 0 1px 0 hsl(var(--c) / 0.35);
+}
+.pl-agents { --c: 40 95% 62%; grid-column: 1 / -1; }
+.pl-queue { --c: 24 90% 60%; }
+.pl-requests { --c: 188 85% 60%; }
+.pl-tasks { --c: 262 70% 72%; }
+.pl-completed { --c: 150 65% 55%; }
+
+.pl-card header { position: relative; z-index: 1; display: flex; align-items: center; gap: 10px; margin-bottom: 12px; padding-right: 66px; }
+.pl-card header .pl-icon { width: 24px; height: 24px; color: hsl(var(--c)); flex: none; }
+.pl-titles h3 { margin: 0; font-size: 1.18em; font-weight: 700; color: var(--pl-text); letter-spacing: 0.02em; }
+.pl-titles span { display: block; font-size: 0.72em; text-transform: uppercase; letter-spacing: 0.14em; color: var(--pl-muted); }
+.pl-count {
+  margin-left: auto; padding: 1px 9px; border-radius: 6px; font-size: 0.78em; font-family: var(--font-monospace, monospace);
+  color: hsl(var(--c)); border: 1px solid hsl(var(--c) / 0.4); background: hsl(var(--c) / 0.08);
+}
+
+.pl-world { position: absolute; top: -26px; right: -26px; width: 92px; height: 92px; border-radius: 50%; pointer-events: none; }
+.pl-agents .pl-world { /* sun */
+  background: radial-gradient(circle at 45% 55%, #fff7dc 0%, #ffd56e 30%, #ff9b3d 62%, #c94f17 100%);
+  box-shadow: 0 0 40px 8px rgba(255, 160, 60, 0.45), 0 0 90px 20px rgba(255, 120, 40, 0.18);
+  animation: pl-corona 4s ease-in-out infinite;
+}
+.pl-queue .pl-world { /* banded gas giant */
+  background:
+    repeating-linear-gradient(168deg, rgba(255, 240, 220, 0.18) 0 5px, transparent 5px 11px, rgba(120, 50, 20, 0.25) 11px 15px, transparent 15px 22px),
+    radial-gradient(circle at 30% 70%, #f6c48a, #d97a3a 45%, #7a3214 100%);
+  box-shadow: inset 14px -12px 22px rgba(0, 0, 0, 0.7), 0 0 26px rgba(240, 130, 60, 0.3);
+}
+.pl-requests .pl-world { /* ice world with polar cap */
+  background:
+    radial-gradient(ellipse 60% 26% at 40% 82%, rgba(255, 255, 255, 0.85), transparent 70%),
+    repeating-linear-gradient(20deg, rgba(255, 255, 255, 0.08) 0 3px, transparent 3px 9px),
+    radial-gradient(circle at 30% 70%, #d9fbff, #6fd3e6 45%, #1f5f86 100%);
+  box-shadow: inset 14px -12px 22px rgba(0, 10, 30, 0.7), 0 0 26px rgba(90, 210, 240, 0.32);
+}
+.pl-tasks .pl-world { /* cratered rock */
+  background:
+    radial-gradient(circle at 30% 62%, rgba(20, 10, 40, 0.55) 0 7px, transparent 8px),
+    radial-gradient(circle at 55% 80%, rgba(20, 10, 40, 0.5) 0 4px, transparent 5px),
+    radial-gradient(circle at 22% 84%, rgba(20, 10, 40, 0.5) 0 3px, transparent 4px),
+    radial-gradient(circle at 48% 55%, rgba(255, 255, 255, 0.12) 0 2px, transparent 3px),
+    radial-gradient(circle at 30% 70%, #c9b6f0, #7e66b8 50%, #33255e 100%);
+  box-shadow: inset 14px -12px 22px rgba(0, 0, 0, 0.72), 0 0 22px rgba(170, 140, 240, 0.28);
+}
+.pl-completed .pl-world { /* living world: oceans, land, clouds */
+  background:
+    radial-gradient(ellipse 22% 12% at 30% 60%, rgba(255, 255, 255, 0.55), transparent 70%),
+    radial-gradient(ellipse 30% 20% at 26% 74%, #4fbf6a 0 60%, transparent 62%),
+    radial-gradient(ellipse 18% 26% at 52% 82%, #3fa65c 0 60%, transparent 62%),
+    radial-gradient(circle at 30% 70%, #8fe0ff, #2a83c6 50%, #0d2f63 100%);
+  box-shadow: inset 14px -12px 22px rgba(0, 0, 0, 0.7), 0 0 26px rgba(80, 200, 160, 0.3);
+}
+
+/* lists */
+.pl-list { position: relative; z-index: 1; display: flex; flex-direction: column; gap: 7px; max-height: 380px; overflow-y: auto; }
+.pl-agents .pl-list { max-height: none; overflow: visible; }
+.pl-row {
+  display: flex; align-items: center; gap: 10px; padding: 9px 11px; border-radius: 12px;
+  background: rgba(255, 255, 255, 0.025); border: 1px solid var(--pl-line);
+  animation: pl-in 0.45s ease-out;
+}
+.pl-main { flex: 1; min-width: 0; line-height: 1.38; }
+.pl-main b { color: hsl(var(--c)); margin-right: 4px; font-family: var(--font-monospace, monospace); font-size: 0.92em; }
+.pl-main small { display: block; color: var(--pl-muted); font-size: 0.8em; }
+.pl-side { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+.pl-chips { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 5px; }
+.pl-chip { padding: 0 8px; border-radius: 5px; font-size: 0.74em; font-family: var(--font-monospace, monospace); color: #c9d3f5; background: rgba(140, 160, 255, 0.07); border: 1px solid rgba(140, 160, 255, 0.16); }
+.pl-noscope { color: #ff9aa8; border-color: rgba(255, 110, 130, 0.45); }
+.pl-tag { display: inline-flex; align-items: center; gap: 5px; font-size: 0.74em; padding: 1px 8px; border-radius: 99px; border: 1px solid currentColor; white-space: nowrap; }
+.pl-clock, .pl-time { font-family: var(--font-monospace, monospace); font-size: 0.78em; color: var(--pl-muted); }
+.pl-empty { color: var(--pl-muted); font-style: italic; margin: 6px 2px; }
+.pl-arrow { color: var(--pl-muted); }
+.pl-rowicon { width: 20px; height: 20px; color: hsl(var(--c)); flex: none; }
+.pl-starpt { flex: none; width: 7px; height: 7px; border-radius: 50%; background: hsl(var(--c)); box-shadow: 0 0 8px hsl(var(--c)); animation: pl-twinkle 3.5s ease-in-out infinite; }
+
+/* tiny planets used in rows */
+.pl-mini {
+  flex: none; display: inline-block; width: 16px; height: 16px; border-radius: 50%;
+  background:
+    repeating-linear-gradient(160deg, rgba(255, 255, 255, 0.14) 0 2px, transparent 2px 5px),
+    radial-gradient(circle at 35% 35%, hsl(var(--h) 75% 70%), hsl(var(--h) 55% 40%) 55%, hsl(var(--h) 60% 16%));
+  box-shadow: inset -3px -2px 4px rgba(0, 0, 0, 0.6), 0 0 6px hsl(var(--h) 80% 55% / 0.45);
+}
+.pl-mini.pl-moonlet { width: 11px; height: 11px; background: radial-gradient(circle at 35% 35%, hsl(var(--h) 30% 88%), hsl(var(--h) 18% 55%) 60%, hsl(var(--h) 20% 25%)); }
+.pl-mini.pl-inline { width: 11px; height: 11px; vertical-align: -1px; }
+.pl-mini.pl-dim { filter: saturate(0.5) brightness(0.8); box-shadow: inset -3px -2px 4px rgba(0, 0, 0, 0.6); }
+
+/* the solar system */
+.pl-orbit-wrap { display: flex; flex-wrap: wrap; align-items: center; gap: 18px 26px; }
+.pl-system { position: relative; flex: none; width: min(250px, 100%); aspect-ratio: 1; }
+.pl-star {
+  position: absolute; left: 50%; top: 50%; width: 34px; height: 34px; margin: -17px; border-radius: 50%;
+  background: radial-gradient(circle at 45% 45%, #fffbe8, #ffd36b 40%, #ff8f33 80%);
+  box-shadow: 0 0 22px 6px rgba(255, 170, 70, 0.55), 0 0 60px 14px rgba(255, 130, 40, 0.2);
+  animation: pl-corona 4s ease-in-out infinite;
+}
+.pl-orbit {
+  position: absolute; left: 50%; top: 50%; width: var(--r); height: var(--r); border-radius: 50%;
+  border: 1px dashed rgba(170, 190, 255, 0.18);
+  transform: translate(-50%, -50%) rotate(var(--a)); /* start angle spreads planets out, even with motion off */
+  animation: pl-orbit var(--t) linear infinite;
+}
+.pl-orbiter { position: absolute; left: 50%; top: 0; transform: translate(-50%, -50%); }
+/* star sits below the planet on its ring, so the lit side faces down and the night side up */
+.pl-planet {
+  display: block; width: 18px; height: 18px; border-radius: 50%;
+  background:
+    repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.13) 0 2px, transparent 2px 5px),
+    radial-gradient(circle at 50% 95%, hsl(var(--h) 80% 72%), hsl(var(--h) 58% 42%) 55%, hsl(var(--h) 65% 15%));
+  box-shadow: inset 0 7px 7px -2px rgba(0, 0, 0, 0.78), 0 0 12px hsl(var(--h) 85% 58% / 0.5);
+}
+.pl-moon-orbit {
+  position: absolute; left: 50%; top: 50%; width: var(--mr); height: var(--mr); margin: calc(var(--mr) / -2);
+  border-radius: 50%; border: 1px dotted rgba(200, 210, 255, 0.14);
+  transform: rotate(var(--ma));
+  animation: pl-moon-spin var(--mt) linear infinite;
+}
+.pl-moon {
+  position: absolute; left: 50%; top: -3.5px; width: 7px; height: 7px; margin-left: -3.5px; border-radius: 50%;
+  background: radial-gradient(circle at 50% 90%, hsl(var(--h) 30% 92%), hsl(var(--h) 18% 50%));
+  box-shadow: inset 0 3px 3px -1px rgba(0, 0, 0, 0.7);
+}
+.pl-orbit.pl-idle, .pl-orbit.pl-active { opacity: 0.55; }
+.pl-orbit.pl-idle { animation-play-state: paused; }
+.pl-orbit.pl-waiting .pl-planet { animation: pl-blink 1.2s ease-in-out infinite; }
+.pl-orbit.pl-testing .pl-planet, .pl-moon-orbit.pl-testing .pl-moon { outline: 1.5px solid hsl(175 90% 58% / 0.85); outline-offset: 3px; }
+.pl-orbit.pl-working .pl-planet { box-shadow: inset 0 7px 7px -2px rgba(0, 0, 0, 0.78), 0 0 16px 2px hsl(var(--h) 90% 60% / 0.7); }
+
+/* legend */
+.pl-legend { flex: 1 1 260px; display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 8px; }
+.pl-agent { display: flex; align-items: flex-start; gap: 9px; padding: 8px 10px; border-radius: 12px; background: rgba(255, 255, 255, 0.025); border: 1px solid var(--pl-line); }
+.pl-agent .pl-mini { width: 20px; height: 20px; margin-top: 1px; }
+.pl-agent b { color: var(--pl-text); font-family: inherit; font-size: 0.95em; }
+.pl-agent small { text-transform: lowercase; }
+.pl-agent.pl-working small { color: hsl(24 90% 66%); }
+.pl-agent.pl-testing small { color: hsl(175 90% 62%); }
+.pl-agent.pl-waiting small { color: hsl(45 95% 65%); }
+.pl-agent.pl-unhooked { opacity: 0.4; }
+.pl-agent.pl-unhooked .pl-mini { filter: grayscale(1); box-shadow: none; }
+.pl-subs { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 5px; }
+.pl-sub { display: inline-flex; align-items: center; gap: 4px; padding: 0 6px 0 3px; border-radius: 99px; background: rgba(255, 255, 255, 0.04); }
+.pl-sub i { font-style: normal; font-size: 0.7em; color: var(--pl-muted); font-family: var(--font-monospace, monospace); }
+.pl-sub.pl-working .pl-mini, .pl-sub.pl-testing .pl-mini { animation: pl-blink 2s ease-in-out infinite; }
+
+/* row states */
+.pl-wait { border-style: dashed; border-color: hsl(45 95% 60% / 0.5); }
+.pl-wait .pl-tag { color: hsl(45 95% 66%); }
+.pl-stale { border-color: rgba(255, 100, 120, 0.6); box-shadow: 0 0 12px rgba(255, 100, 120, 0.18); }
+.pl-req.pl-pending { animation: pl-in 0.45s ease-out, pl-signal 1.6s ease-in-out infinite; }
+.pl-req.pl-pending .pl-tag { color: hsl(45 95% 66%); }
+.pl-req.pl-ok .pl-tag { color: #62e39a; }
+.pl-req.pl-no .pl-tag { color: #ff7389; }
+.pl-test.pl-open { border-style: dashed; border-color: hsl(175 90% 55% / 0.45); }
+.pl-test.pl-open .pl-tag { color: hsl(175 90% 62%); }
+.pl-test.pl-running { border-color: hsl(175 90% 55% / 0.6); animation: pl-in 0.45s ease-out, pl-signal-teal 1.8s ease-in-out infinite; }
+.pl-test.pl-running .pl-tag { color: hsl(175 90% 66%); }
+.pl-failed { border-color: rgba(255, 100, 120, 0.55); background: rgba(255, 90, 110, 0.06); }
+.pl-failed small { color: #ff9aa8; }
+.pl-done { opacity: 0.88; }
+
+/* icons */
+.pl-icon { fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.pl-icon .pl-fill { fill: currentColor; stroke: none; }
+
+@keyframes pl-orbit { from { transform: translate(-50%, -50%) rotate(var(--a)); } to { transform: translate(-50%, -50%) rotate(calc(var(--a) + 360deg)); } }
+@keyframes pl-moon-spin { from { transform: rotate(var(--ma)); } to { transform: rotate(calc(var(--ma) + 360deg)); } }
+@keyframes pl-corona { 0%, 100% { filter: brightness(1); } 50% { filter: brightness(1.18); } }
+@keyframes pl-twinkle { 0%, 100% { opacity: 0.35; } 50% { opacity: 0.85; } }
+@keyframes pl-blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
+@keyframes pl-signal { 0%, 100% { box-shadow: 0 0 0 rgba(255, 200, 90, 0); } 50% { box-shadow: 0 0 16px rgba(255, 200, 90, 0.35); } }
+@keyframes pl-signal-teal { 0%, 100% { box-shadow: 0 0 0 rgba(60, 230, 210, 0); } 50% { box-shadow: 0 0 16px rgba(60, 230, 210, 0.35); } }
+@keyframes pl-in { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+
+@media (max-width: 600px) {
+  .pl-board { padding: 12px; border-radius: 16px; }
+  .pl-grid { gap: 12px; }
+  .pl-card { min-height: 0; }
+  .pl-stats { margin-left: 0; }
+  .pl-system { width: min(220px, 100%); margin: 0 auto; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pl-board *, .pl-board::after { animation: none !important; }
+}

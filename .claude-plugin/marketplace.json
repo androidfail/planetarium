@@ -1,0 +1,12 @@
+{
+  "name": "planetarium",
+  "owner": { "name": "androidfail" },
+  "description": "Planetarium: an Obsidian-based board for teams of coding agents.",
+  "plugins": [
+    {
+      "name": "planetarium",
+      "source": "./",
+      "description": "Hook Claude Code / Oh My Pi agents into an Obsidian board: /createboard, /hook, /unhook, /serveboard."
+    }
+  ]
+}
